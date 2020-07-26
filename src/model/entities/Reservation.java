@@ -47,10 +47,25 @@ public class Reservation {
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
 	
-	//metodo para alterar os dias da reserva
-	public void updateDates(Date checkIn, Date checkOut) {
+	//metodo para validar as informações e alterar os dias da reserva
+	public String updateDates(Date checkIn, Date checkOut) {
+		
+		//varivavel NOW recebera a data atual
+		Date now = new Date();
+		//se as datas checkIn ou checkOut for anterior a data atual o programa não executa
+		if (checkIn.before(now) || checkOut.before(now)) {
+			return "Error in reservation: Reservation dates for update must be future dates";
+		//se a data de checkOut for depois a checkIn o pragram não executa
+		} 
+		if (!checkOut.after(checkIn)) {
+			return "Error in reservation: Check-out date must be after check-in date";
+		}
+		
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		
+		//se as condições não retornar erro então o metódo retorna-rá nulo (não ouve erro na operação)
+		return null;
 	}
 	
 	//metodo toString também é uma sobreposição, por este motivo utilizamos o "Override"
@@ -64,7 +79,7 @@ public class Reservation {
 				+ sdf.format(checkOut)
 				+ ", "
 				+ duration()
-				+ "nights";
+				+ " nights";
 	}
 
 }
